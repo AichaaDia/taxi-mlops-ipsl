@@ -1,25 +1,37 @@
 # Complete MLOps Pipeline for Taxi Fare Prediction
 
+## 🎓 Institut Polytechnique de Saint Louis (IPSL)
+
+**Course:** Data Engineering, AI Engineering and MLOps  
+**Instructor:** Mbaye Babacar Gueye, PhD  
+**Institution:** Institut Polytechnique de Saint Louis  
+**Academic Year:** 2025-2026
+
+---
+
 ## 📚 Educational Project Overview
 
 This project demonstrates a **complete end-to-end MLOps pipeline** using Databricks Delta Live Tables (DLT) for NYC Yellow Taxi data. It showcases modern data engineering and machine learning practices including data ingestion, feature engineering, model training, and automated deployment with CI/CD.
 
-**Target Audience:** Data Engineering and ML Engineering students  
+**Target Audience:** IPSL Students - Data Engineering and ML Engineering  
 **Technologies:** Databricks, Delta Live Tables, PySpark, GitHub Actions, Unity Catalog  
-**Dataset:** NYC Yellow Taxi Trip Records
+**Dataset:** NYC Yellow Taxi Trip Records  
+**Cloud Provider:** AWS (Amazon Web Services)
 
 ---
 
 ## 🎯 Learning Objectives
 
-By studying this project, students will learn:
+By studying this project, IPSL students will learn:
 
 1. **Medallion Architecture** - Bronze, Silver, Gold data layers
 2. **Feature Engineering** - Creating ML-ready features from raw data
 3. **MLOps Best Practices** - Model training, versioning, and deployment
 4. **Data Quality** - Implementing expectations and validations
-5. **CI/CD for Data Pipelines** - Automated testing and deployment
+5. **CI/CD for Data Pipelines** - Automated testing and deployment with GitHub Actions
 6. **Incremental Processing** - Efficient data processing patterns
+7. **Cloud Data Engineering** - Working with AWS and Databricks
+8. **Unity Catalog** - Data governance and catalog management
 
 ---
 
@@ -30,15 +42,17 @@ By studying this project, students will learn:
 │                         DATA SOURCES                             │
 │              /Volumes/taxi_mlops_prod/taxi_analytics/            │
 │                        yellowdata (Parquet)                      │
+│                         [AWS S3 Storage]                         │
 └────────────────────────────┬────────────────────────────────────┘
                              │
                              ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                      BRONZE LAYER (Raw)                          │
 │                   bronze_taxi_trips                              │
-│  • Auto Loader ingestion                                         │
+│  • Auto Loader ingestion (cloudFiles)                           │
 │  • Schema inference                                              │
 │  • Streaming table                                               │
+│  • Serverless compute                                            │
 └────────────────────────────┬────────────────────────────────────┘
                              │
                              ▼
@@ -75,6 +89,15 @@ By studying this project, students will learn:
 │                          │  │   - Batch inference (1000 rows)  │
 │                          │  │   - Prediction error analysis    │
 └──────────────────────────┘  └──────────────────────────────────┘
+                             │
+                             ▼
+                  ┌──────────────────────┐
+                  │   CI/CD AUTOMATION   │
+                  │   GitHub Actions     │
+                  │  • Validate code     │
+                  │  • Trigger pipeline  │
+                  │  • Monitor results   │
+                  └──────────────────────┘
 ```
 
 ---
@@ -120,12 +143,13 @@ taxi-mlops-ipsl/
 
 **File:** `transformations/bronze/bronze_taxi_trips.py`
 
-**Purpose:** Ingest raw taxi trip data from cloud storage
+**Purpose:** Ingest raw taxi trip data from cloud storage (AWS S3 via Unity Catalog Volumes)
 
 **Key Concepts:**
 - **Auto Loader (cloudFiles)**: Automatically detects and processes new files
 - **Schema Inference**: Automatically determines data types
 - **Streaming Table**: Continuously processes new data
+- **Serverless Compute**: No cluster management required
 
 **Code Highlights:**
 ```python
@@ -139,10 +163,11 @@ def bronze_taxi_trips():
     )
 ```
 
-**What Students Learn:**
+**What IPSL Students Learn:**
 - How to use Auto Loader for scalable data ingestion
 - Streaming vs batch processing
 - Schema evolution handling
+- Working with Unity Catalog Volumes
 
 ---
 
@@ -163,7 +188,7 @@ def bronze_taxi_trips():
 3. **pickup_hour**: Hour of day (0-23)
 4. **pickup_day_of_week**: Day of week (1-7)
 5. **time_of_day**: Categorical (morning/afternoon/evening/night)
-6. **is_airport_pickup/dropoff**: Boolean flags for airport trips
+6. **is_airport_pickup/dropoff**: Boolean flags for airport trips (JFK, LaGuardia, Newark)
 
 **Data Quality Rules:**
 ```python
@@ -175,10 +200,11 @@ def bronze_taxi_trips():
 })
 ```
 
-**What Students Learn:**
-- Feature engineering techniques
-- Data quality validation
-- Domain knowledge application (e.g., airport codes)
+**What IPSL Students Learn:**
+- Feature engineering techniques for ML
+- Data quality validation patterns
+- Domain knowledge application (e.g., NYC airport codes)
+- PySpark DataFrame transformations
 
 ---
 
@@ -194,29 +220,30 @@ def bronze_taxi_trips():
 - Trip counts by location and hour
 - Average trip metrics (distance, duration, fare, speed)
 - Airport trip percentages
-- **Use Case**: Demand forecasting, surge pricing
+- **Use Case**: Demand forecasting, surge pricing algorithms
 
 #### 3.2 Daily Time Patterns
 - Demand patterns by time of day
 - Day of week trends
 - Payment type distributions
-- **Use Case**: Operational planning, driver allocation
+- **Use Case**: Operational planning, driver allocation optimization
 
 #### 3.3 Location Pair Metrics
 - Popular routes (pickup → dropoff)
 - Route efficiency metrics
 - Minimum/maximum durations per route
-- **Use Case**: Route optimization, ETA prediction
+- **Use Case**: Route optimization, ETA prediction models
 
 **Key Concepts:**
-- **Materialized Views**: Pre-computed aggregations
+- **Materialized Views**: Pre-computed aggregations for performance
 - **Incremental Refresh**: Only process changed data (serverless only)
 - **Partitioning**: Organize data by date for efficient queries
 
-**What Students Learn:**
+**What IPSL Students Learn:**
 - Aggregation patterns for analytics
-- Partitioning strategies
-- Incremental vs full refresh
+- Partitioning strategies for big data
+- Incremental vs full refresh trade-offs
+- Performance optimization techniques
 
 ---
 
@@ -232,6 +259,7 @@ def bronze_taxi_trips():
 - 80/20 train/test split using hash-based partitioning
 - Feature selection (trip, time, location features)
 - Target variable: `total_amount` (fare prediction)
+- Data filtering for quality
 
 #### 4.2 Model Training
 
@@ -239,7 +267,7 @@ def bronze_taxi_trips():
 
 **Purpose:** Train fare prediction model
 
-**Model Type:** Linear Regression (SQL-based)
+**Model Type:** Linear Regression (SQL-based implementation)
 
 **Model Formula:**
 ```
@@ -252,14 +280,15 @@ predicted_fare = base_fare (3.0)
 ```
 
 **Evaluation Metrics:**
-- **RMSE** (Root Mean Square Error): Average prediction error
+- **RMSE** (Root Mean Square Error): Average prediction error magnitude
 - **MAE** (Mean Absolute Error): Average absolute error
-- **Correlation**: Relationship strength between predicted and actual
+- **Correlation**: Relationship strength between predicted and actual values
 
-**What Students Learn:**
+**What IPSL Students Learn:**
 - Feature encoding (one-hot encoding for categorical variables)
-- Model evaluation metrics
+- Model evaluation metrics and interpretation
 - Train/test split methodology
+- SQL-based ML implementation (pipeline-compatible)
 
 #### 4.3 Model Registry
 
@@ -269,14 +298,16 @@ predicted_fare = base_fare (3.0)
 
 **Stored Information:**
 - Model name and version
-- Performance metrics
+- Performance metrics (RMSE, MAE, correlation)
 - Training timestamp
 - Model status (active/archived)
+- Model description and lineage
 
-**What Students Learn:**
-- Model versioning
-- Model governance
-- Metadata tracking
+**What IPSL Students Learn:**
+- Model versioning best practices
+- Model governance and compliance
+- Metadata tracking for reproducibility
+- MLOps lifecycle management
 
 #### 4.4 Batch Predictions
 
@@ -285,93 +316,110 @@ predicted_fare = base_fare (3.0)
 **Purpose:** Generate predictions on new data
 
 **Output:**
-- 1000 sample predictions
+- 1000 sample predictions from test set
 - Actual vs predicted comparison
 - Prediction error and error percentage
+- Feature values for analysis
 
-**What Students Learn:**
+**What IPSL Students Learn:**
 - Batch inference patterns
-- Model deployment
-- Prediction monitoring
+- Model deployment strategies
+- Prediction monitoring and analysis
+- Error analysis techniques
 
 ---
 
-## 🚀 CI/CD Pipeline
+## 🚀 CI/CD Pipeline with GitHub Actions
 
-### GitHub Actions Workflow
+### Workflow Overview
 
 **File:** `.github/workflows/databricks-pipeline.yml`
 
 **Triggers:**
 - Push to `main` or `develop` branches
 - Pull requests to `main`
-- Manual workflow dispatch
+- Manual workflow dispatch (for testing)
 
 **Jobs:**
 
-1. **validate-pipeline**: Syntax validation
-2. **trigger-pipeline**: Start Databricks pipeline update
-3. **dry-run-on-pr**: Validate on pull requests
+1. **validate-pipeline**: 
+   - Validates Python syntax
+   - Checks code quality
+   - Runs on every commit
 
-**What Students Learn:**
-- CI/CD best practices
-- Automated testing
-- Infrastructure as Code
+2. **trigger-pipeline**: 
+   - Triggers Databricks pipeline update
+   - Waits for completion
+   - Reports status
+
+3. **dry-run-on-pr**: 
+   - Validates changes on pull requests
+   - Comments on PR with validation results
+   - Prevents broken code from merging
+
+**What IPSL Students Learn:**
+- CI/CD best practices for data pipelines
+- Automated testing and validation
+- Infrastructure as Code (IaC)
+- GitHub Actions workflow design
+- DevOps for data engineering
 
 ---
 
-## 🛠️ Setup Instructions
+## 🛠️ Setup Instructions for IPSL Students
 
 ### Prerequisites
 
-1. **Databricks Workspace** with Unity Catalog enabled
-2. **GitHub Account** for version control
-3. **Data Source**: NYC Yellow Taxi data in `/Volumes/taxi_mlops_prod/taxi_analytics/yellowdata`
+1. **Databricks Workspace** (provided by instructor)
+2. **GitHub Account** (free account)
+3. **Access to Unity Catalog**: `taxi_mlops_prod`
+4. **Data Source**: NYC Yellow Taxi data in Unity Catalog Volume
 
 ### Step 1: Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/taxi-mlops-ipsl.git
+git clone https://github.com/bentechno/taxi-mlops-ipsl.git
 cd taxi-mlops-ipsl
 ```
 
-### Step 2: Configure Databricks
+### Step 2: Verify Databricks Access
 
-1. Create catalog: `taxi_mlops_prod`
-2. Create schema: `default`
-3. Upload data to volume: `/Volumes/taxi_mlops_prod/taxi_analytics/yellowdata`
+1. Log into Databricks workspace (credentials provided by instructor)
+2. Verify access to catalog: `taxi_mlops_prod`
+3. Check data availability: `/Volumes/taxi_mlops_prod/taxi_analytics/yellowdata`
 
-### Step 3: Create Pipeline
+### Step 3: Create Your Pipeline
 
-1. Go to Databricks → Workflows → Delta Live Tables
-2. Click "Create Pipeline"
+1. Go to Databricks → **Workflows** → **Delta Live Tables**
+2. Click **"Create Pipeline"**
 3. Configure:
-   - **Name**: Complete-MLOps-Pipeline
-   - **Source Code**: `/Repos/YOUR_USERNAME/taxi-mlops-ipsl/transformations/**`
+   - **Name**: `Complete-MLOps-Pipeline-[YourName]`
+   - **Source Code**: `/Repos/mbayebabacar.gueye@bennen.tech/taxi-mlops-ipsl/transformations/**`
    - **Catalog**: `taxi_mlops_prod`
-   - **Schema**: `default`
-   - **Compute**: Serverless (recommended)
+   - **Schema**: `default` (or create your own)
+   - **Compute**: **Serverless** (recommended)
+   - **Channel**: Current
+   - **Configuration**: Add `spark.databricks.delta.properties.defaults.feature.timestampNtz` = `supported`
 
-### Step 4: Configure GitHub Secrets
+### Step 4: Configure GitHub Secrets (Optional - for CI/CD)
 
-Add these secrets to your GitHub repository:
+If setting up CI/CD, add these secrets to your GitHub repository:
 
 - `DATABRICKS_HOST`: Your workspace URL
 - `DATABRICKS_TOKEN`: Personal access token
-- `PIPELINE_ID`: Your pipeline ID
+- `PIPELINE_ID`: Your pipeline ID (found in pipeline URL)
 
 ### Step 5: Run Pipeline
 
-**Manual:**
-```bash
-# In Databricks UI
-Click "Start" on your pipeline
-```
+**Manual Execution:**
+1. In Databricks UI, go to your pipeline
+2. Click **"Start"**
+3. Monitor progress in the UI
 
 **Via GitHub Actions:**
 ```bash
 git add .
-git commit -m "Update pipeline"
+git commit -m "Update pipeline configuration"
 git push origin main
 ```
 
@@ -379,185 +427,306 @@ git push origin main
 
 ## 📊 Key Datasets
 
-| Dataset Name | Type | Description | Records |
-|-------------|------|-------------|---------|
-| `bronze_taxi_trips` | Streaming Table | Raw taxi trip data | ~Millions |
-| `silver_taxi_features` | Streaming Table | Cleaned with ML features | ~Millions |
-| `gold_hourly_location_metrics` | Materialized View | Hourly aggregations | ~Thousands |
-| `gold_daily_time_patterns` | Materialized View | Daily patterns | ~Hundreds |
-| `gold_location_pair_metrics` | Materialized View | Route metrics | ~Thousands |
-| `ml_training_data` | Materialized View | ML training dataset | ~Millions |
-| `ml_model_training` | Materialized View | Model metrics | 3 rows |
-| `ml_model_registry` | Materialized View | Model metadata | 1 row |
-| `ml_predictions` | Materialized View | Sample predictions | 1000 rows |
+| Dataset Name | Type | Description | Approx. Records |
+|-------------|------|-------------|-----------------|
+| `bronze_taxi_trips` | Streaming Table | Raw taxi trip data | ~9.5 Million |
+| `silver_taxi_features` | Streaming Table | Cleaned with ML features | ~8.5 Million |
+| `gold_hourly_location_metrics` | Materialized View | Hourly aggregations by location | ~210,000 |
+| `gold_daily_time_patterns` | Materialized View | Daily time-of-day patterns | ~369 |
+| `gold_location_pair_metrics` | Materialized View | Route-level metrics | ~235,000 |
+| `ml_training_data` | Materialized View | ML training dataset with split | ~8.5 Million |
+| `ml_model_training` | Materialized View | Model performance metrics | 1 row |
+| `ml_model_registry` | Materialized View | Model metadata and versions | 1 row |
+| `ml_predictions` | Materialized View | Sample predictions with errors | 1,000 rows |
 
 ---
 
-## 🎓 Learning Exercises
+## 🎓 Learning Exercises for IPSL Students
 
-### Exercise 1: Add New Features
+### Exercise 1: Add New Features (Beginner)
+**Objective:** Enhance feature engineering
+
 **Task:** Add a new feature to predict if a trip will have a tip > $5
 
 **Steps:**
 1. Modify `silver_taxi_features.py`
 2. Add feature: `high_tip = tip_amount > 5`
 3. Update model to use this feature
+4. Compare model performance
 
-### Exercise 2: Create New Aggregation
+**Expected Learning:** Feature engineering, boolean logic, model improvement
+
+---
+
+### Exercise 2: Create New Aggregation (Intermediate)
+**Objective:** Practice aggregation patterns
+
 **Task:** Create a gold table for hourly revenue by payment type
 
 **Steps:**
-1. Create new file: `gold_revenue_analysis.py`
+1. Create new file: `transformations/gold/gold_revenue_analysis.py`
 2. Aggregate by hour and payment_type
-3. Calculate total revenue and trip counts
+3. Calculate total revenue, trip counts, and average fare
+4. Add partitioning by date
 
-### Exercise 3: Improve Model
+**Expected Learning:** Aggregations, partitioning, materialized views
+
+---
+
+### Exercise 3: Improve Model Accuracy (Advanced)
+**Objective:** Enhance ML model performance
+
 **Task:** Add more features to improve prediction accuracy
 
-**Ideas:**
-- Weather data (if available)
-- Holiday indicator
-- Traffic patterns
-- Historical averages for route
+**Ideas to implement:**
+- Add interaction features (distance × time_of_day)
+- Create location popularity scores
+- Add historical averages for routes
+- Implement polynomial features
 
-### Exercise 4: Add Data Quality Alerts
-**Task:** Set up alerts when data quality expectations fail
+**Expected Learning:** Advanced feature engineering, model optimization
+
+---
+
+### Exercise 4: Implement Data Quality Monitoring (Intermediate)
+**Objective:** Set up comprehensive data quality checks
+
+**Task:** Add monitoring for data quality expectations
 
 **Steps:**
 1. Add more expectations to silver layer
-2. Configure pipeline notifications
-3. Create monitoring dashboard
+2. Create a monitoring dashboard
+3. Set up alerts for quality failures
+4. Document quality metrics
 
-### Exercise 5: Implement A/B Testing
-**Task:** Compare two different models
+**Expected Learning:** Data quality, monitoring, alerting
+
+---
+
+### Exercise 5: A/B Testing Framework (Advanced)
+**Objective:** Compare multiple models
+
+**Task:** Implement A/B testing for two different models
 
 **Steps:**
 1. Create `ml_model_training_v2.py` with different formula
-2. Compare metrics between v1 and v2
-3. Document which performs better
+2. Run both models on same test set
+3. Compare metrics (RMSE, MAE, R²)
+4. Document which performs better and why
+5. Create visualization of results
+
+**Expected Learning:** A/B testing, model comparison, statistical analysis
 
 ---
 
 ## 🔍 Monitoring & Observability
 
-### Pipeline Metrics
-
-Monitor these in Databricks UI:
+### Pipeline Metrics to Monitor
 
 1. **Data Quality Metrics**
    - Expectation pass/fail rates
-   - Records dropped
-   - Data freshness
+   - Records dropped due to quality issues
+   - Data freshness (time since last update)
 
 2. **Performance Metrics**
    - Processing time per layer
    - Data volume processed
-   - Compute costs
+   - Compute costs (serverless)
+   - Memory usage
 
 3. **Model Metrics**
-   - RMSE, MAE, R²
+   - RMSE, MAE, R² over time
    - Prediction error distribution
-   - Model drift over time
+   - Model drift detection
 
-### Accessing Metrics
+### Accessing Metrics via SQL
 
 ```sql
--- View data quality metrics
+-- View data quality metrics from event log
 SELECT * FROM event_log('Complete-MLOps-Pipeline')
 WHERE event_type = 'flow_progress'
+ORDER BY timestamp DESC;
 
 -- View model performance
-SELECT * FROM taxi_mlops_prod.default.ml_model_training
+SELECT * FROM taxi_mlops_prod.default.ml_model_training;
 
--- View prediction errors
+-- Analyze prediction errors
 SELECT 
   AVG(absolute_error) as avg_error,
   MAX(absolute_error) as max_error,
+  MIN(absolute_error) as min_error,
+  PERCENTILE(absolute_error, 0.50) as median_error,
   PERCENTILE(absolute_error, 0.95) as p95_error
-FROM taxi_mlops_prod.default.ml_predictions
+FROM taxi_mlops_prod.default.ml_predictions;
+
+-- Check data freshness
+SELECT 
+  MAX(pickup_date) as latest_date,
+  COUNT(*) as total_records
+FROM taxi_mlops_prod.default.silver_taxi_features;
 ```
 
 ---
 
-## 🐛 Troubleshooting
+## 🐛 Troubleshooting Guide
 
-### Common Issues
+### Common Issues for IPSL Students
 
 **Issue 1: Pipeline fails at bronze layer**
-- **Cause**: Data source not accessible
-- **Solution**: Verify volume path and permissions
+- **Symptom**: "FILE_NOT_FOUND" or "Path does not exist"
+- **Cause**: Data source not accessible or incorrect path
+- **Solution**: 
+  - Verify volume path: `/Volumes/taxi_mlops_prod/taxi_analytics/yellowdata`
+  - Check Unity Catalog permissions
+  - Contact instructor if data is missing
 
-**Issue 2: High prediction errors**
+**Issue 2: High prediction errors in ML model**
+- **Symptom**: RMSE > 20, low correlation
 - **Cause**: Model too simple or data quality issues
-- **Solution**: Add more features or improve data cleaning
+- **Solution**: 
+  - Add more features (see Exercise 3)
+  - Improve data cleaning in silver layer
+  - Check for outliers in training data
 
 **Issue 3: Slow incremental refresh**
+- **Symptom**: Pipeline takes too long to update
 - **Cause**: Not using serverless or large data volumes
-- **Solution**: Enable serverless compute and optimize partitioning
+- **Solution**: 
+  - Enable serverless compute
+  - Optimize partitioning strategy
+  - Check for data skew
 
-**Issue 4: GitHub Actions fails**
-- **Cause**: Invalid secrets or permissions
-- **Solution**: Verify DATABRICKS_TOKEN and PIPELINE_ID
+**Issue 4: GitHub Actions workflow fails**
+- **Symptom**: 403 error or authentication failure
+- **Cause**: Invalid secrets or insufficient permissions
+- **Solution**: 
+  - Verify `DATABRICKS_HOST` and `DATABRICKS_TOKEN` secrets
+  - Check `PIPELINE_ID` is correct
+  - Ensure workflow has proper permissions (see workflow file)
+
+**Issue 5: Cannot access pipeline tables**
+- **Symptom**: "Table not found" errors
+- **Cause**: Pipeline hasn't run successfully or permissions issue
+- **Solution**:
+  - Run pipeline at least once
+  - Check Unity Catalog permissions
+  - Verify catalog and schema names
 
 ---
 
-## 📚 Additional Resources
+## 📚 Additional Resources for IPSL Students
 
-### Documentation
+### Official Documentation
 - [Databricks Delta Live Tables](https://docs.databricks.com/delta-live-tables/index.html)
-- [Auto Loader](https://docs.databricks.com/ingestion/auto-loader/index.html)
-- [Unity Catalog](https://docs.databricks.com/data-governance/unity-catalog/index.html)
+- [Auto Loader Documentation](https://docs.databricks.com/ingestion/auto-loader/index.html)
+- [Unity Catalog Guide](https://docs.databricks.com/data-governance/unity-catalog/index.html)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
 
-### Tutorials
-- [Medallion Architecture](https://www.databricks.com/glossary/medallion-architecture)
+### Learning Resources
+- [Medallion Architecture Explained](https://www.databricks.com/glossary/medallion-architecture)
 - [MLOps on Databricks](https://www.databricks.com/solutions/mlops)
-- [Feature Engineering](https://www.databricks.com/blog/2022/10/20/feature-engineering-databricks.html)
+- [Feature Engineering Best Practices](https://www.databricks.com/blog/2022/10/20/feature-engineering-databricks.html)
+- [PySpark Documentation](https://spark.apache.org/docs/latest/api/python/)
 
 ### NYC Taxi Dataset
 - [TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 - [Data Dictionary](https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf)
+- [Dataset Schema Information](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
+
+### Course Materials
+- Course slides and lectures (provided by Dr. Gueye)
+- Lab exercises and assignments
+- Office hours: [Contact instructor for schedule]
 
 ---
 
-## 👥 Contributing
+## 👥 Contributing & Collaboration
 
-Students are encouraged to:
-1. Fork this repository
-2. Create feature branches
-3. Submit pull requests with improvements
-4. Document your changes
+IPSL students are encouraged to:
+1. **Fork this repository** for your own experiments
+2. **Create feature branches** for new features
+3. **Submit pull requests** with improvements
+4. **Document your changes** thoroughly
+5. **Share learnings** with classmates
+6. **Ask questions** during office hours
+
+### Collaboration Guidelines
+- Use descriptive commit messages
+- Comment your code thoroughly
+- Follow PEP 8 style guide for Python
+- Test changes before submitting PRs
+- Help fellow students in discussions
 
 ---
 
-## 📝 License
+## 📝 Assessment & Grading
 
-This project is for educational purposes.
+This project may be used for course assessment. Students will be evaluated on:
 
----
+1. **Technical Implementation** (40%)
+   - Correct implementation of pipeline layers
+   - Code quality and organization
+   - Proper use of Databricks features
 
-## 🙋 Questions & Support
+2. **Feature Engineering** (20%)
+   - Quality of derived features
+   - Domain knowledge application
+   - Data quality implementation
 
-For questions about this project:
-1. Review the documentation in `cicd/CICD_SETUP_GUIDE.py`
-2. Check the troubleshooting section above
-3. Examine the code comments in each transformation file
-4. Reach out to your instructor
+3. **MLOps Practices** (20%)
+   - Model training and evaluation
+   - CI/CD implementation
+   - Documentation quality
+
+4. **Innovation & Improvement** (20%)
+   - Completion of exercises
+   - Additional features or improvements
+   - Problem-solving approach
 
 ---
 
 ## 🎯 Project Outcomes
 
-After completing this project, students will be able to:
+After completing this project, IPSL students will be able to:
 
-✅ Design and implement medallion architecture  
-✅ Build production-grade data pipelines  
-✅ Apply feature engineering techniques  
-✅ Train and deploy ML models  
-✅ Implement data quality checks  
-✅ Set up CI/CD for data pipelines  
-✅ Monitor and troubleshoot pipelines  
+✅ Design and implement medallion architecture for data pipelines  
+✅ Build production-grade data pipelines using Databricks DLT  
+✅ Apply feature engineering techniques for ML models  
+✅ Train and deploy ML models in a pipeline  
+✅ Implement comprehensive data quality checks  
+✅ Set up CI/CD for automated data pipeline deployment  
+✅ Monitor and troubleshoot production pipelines  
 ✅ Work with Unity Catalog for data governance  
+✅ Use GitHub Actions for automation  
+✅ Apply MLOps best practices in real-world scenarios  
+
+---
+
+## 📧 Contact & Support
+
+**Instructor:** Dr. Mbaye Babacar Gueye  
+**Institution:** Institut Polytechnique de Saint Louis (IPSL)  
+**Course:** Data Engineering, AI Engineering and MLOps
+
+For questions about this project:
+1. Review this documentation thoroughly
+2. Check the troubleshooting section
+3. Examine code comments in transformation files
+4. Attend office hours
+5. Post questions in course discussion forum
+6. Email instructor for urgent issues
+
+---
+
+## 🏆 Acknowledgments
+
+- **Institut Polytechnique de Saint Louis** for providing infrastructure
+- **Databricks** for the platform and documentation
+- **NYC Taxi & Limousine Commission** for the dataset
+- **IPSL Students** for feedback and contributions
 
 ---
 
 **Happy Learning! 🚀**
+
+*This project is part of the Data Engineering, AI Engineering and MLOps course at Institut Polytechnique de Saint Louis, taught by Dr. Mbaye Babacar Gueye.*
