@@ -33,7 +33,7 @@ demand_features = (
 
 # Register to Feature Store
 fs.create_table(
-    name="taxi_mlops_prod.taxi_ml.demand_features",
+    name="taxi_mlops_prod-votrePrenom_Nom.taxi_ml.demand_features",
     primary_keys=["pickup_zone"],
     df=demand_features,
     description="Demand statistics by zone"

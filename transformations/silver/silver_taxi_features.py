@@ -24,7 +24,7 @@ def silver_taxi_features():
     - Applies data quality expectations
     """
     return (
-        spark.readStream.table("bronze_taxi_trips")
+        spark.readStream.table("bronze_taxi_trips_[votrePrenom_Nom]")
         .filter("VendorID IS NOT NULL")
         
         # Calculate trip duration in minutes
