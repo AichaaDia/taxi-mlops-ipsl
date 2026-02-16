@@ -40,7 +40,7 @@ By studying this project, IPSL students will learn:
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         DATA SOURCES                             │
-│              /Volumes/taxi_mlops_prod/taxi_analytics/            │
+│              /Vol<VosPrenomNoms>/taxi_mlops_prod/taxi_analytics/            │
 │                        yellowdata (Parquet)                      │
 │                         [AWS S3 Storage]                         │
 └────────────────────────────┬────────────────────────────────────┘
@@ -159,7 +159,7 @@ def bronze_taxi_trips():
         spark.readStream.format("cloudFiles")
         .option("cloudFiles.format", "parquet")
         .option("cloudFiles.inferColumnTypes", "true")
-        .load("/Volumes/taxi_mlops_prod/taxi_analytics/yellowdata")
+        .load("/Vol<VosPrenomNoms>/taxi_mlops_prod/taxi_analytics/yellowdata")
     )
 ```
 
@@ -386,7 +386,7 @@ cd taxi-mlops-ipsl
 
 1. Log into Databricks workspace (credentials provided by instructor)
 2. Verify access to catalog: `taxi_mlops_prod`
-3. Check data availability: `/Volumes/taxi_mlops_prod/taxi_analytics/yellowdata`
+3. Check data availability: `/Vol<VosPrenomNoms>/taxi_mlops_prod/taxi_analytics/yellowdata`
 
 ### Step 3: Create Your Pipeline
 
@@ -576,7 +576,7 @@ FROM taxi_mlops_prod.default.silver_taxi_features;
 - **Symptom**: "FILE_NOT_FOUND" or "Path does not exist"
 - **Cause**: Data source not accessible or incorrect path
 - **Solution**: 
-  - Verify volume path: `/Volumes/taxi_mlops_prod/taxi_analytics/yellowdata`
+  - Verify volume path: `/Vol<VosPrenomNoms>/taxi_mlops_prod/taxi_analytics/yellowdata`
   - Check Unity Catalog permissions
   - Contact instructor if data is missing
 
