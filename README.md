@@ -444,7 +444,7 @@ git push origin main
 ## 📋 Student Assignments & Required Work
 
 ### Overview
-All IPSL students must complete the following work as part of this course:
+You should use the available worskpace in Databricks but create your own tokens. All IPSL students must complete the following work as part of this course:
 
 ### Part 1: Pipeline Understanding & Setup (Mandatory)
 
@@ -834,7 +834,6 @@ FROM taxi_mlops_prod.default.silver_taxi_features;
 ### Course Materials
 - Course slides and lectures (provided by Dr. Gueye)
 - Lab exercises and assignments
-- Office hours: [Contact instructor for schedule]
 
 ---
 
@@ -902,7 +901,7 @@ After completing this project, IPSL students will be able to:
 
 ## 📧 Contact & Support
 
-**Instructor:** Dr. Mbaye Babacar Gueye  
+**Instructor:** Dr. Mbaye Babacar Gueye, mbayebabacar@gmail.com, Tel WA: remis au responsable  
 **Institution:** Institut Polytechnique de Saint Louis (IPSL)  
 **Course:** Data Engineering, AI Engineering and MLOps
 
@@ -925,6 +924,6 @@ For questions about this project:
 
 ---
 
-**Happy Learning! 🚀**
+**Bonne chance! 🚀**
 
 *This project is part of the Data Engineering, AI Engineering and MLOps course at Institut Polytechnique de Saint Louis, taught by Dr. Mbaye Babacar Gueye.*
