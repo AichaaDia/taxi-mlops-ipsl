@@ -17,6 +17,9 @@ This project demonstrates a **complete end-to-end MLOps pipeline** using Databri
 **Technologies:** Databricks, Delta Live Tables, PySpark, GitHub Actions, Unity Catalog  
 **Dataset:** NYC Yellow Taxi Trip Records  
 **Cloud Provider:** AWS (Amazon Web Services)
+---
+
+## 📚 Deadline: 2026-02-21 before 11:59PM
 
 ---
 
