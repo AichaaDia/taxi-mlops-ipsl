@@ -395,7 +395,7 @@ cd taxi-mlops-ipsl
 3. Configure:
    - **Name**: `Complete-MLOps-Pipeline-[YourName]`
    - **Source Code**: `/Repos/mbayebabacar.gueye@bennen.tech/taxi-mlops-ipsl/transformations/**`
-   - **Catalog**: `taxi_mlops_prod`
+   - **Catalog**: `taxi_mlops_prod_[YourName]`
    - **Schema**: `default` (or create your own)
    - **Compute**: **Serverless** (recommended)
    - **Channel**: Current
@@ -438,6 +438,204 @@ git push origin main
 | `ml_model_training` | Materialized View | Model performance metrics | 1 row |
 | `ml_model_registry` | Materialized View | Model metadata and versions | 1 row |
 | `ml_predictions` | Materialized View | Sample predictions with errors | 1,000 rows |
+
+---
+
+## 📋 Student Assignments & Required Work
+
+### Overview
+All IPSL students must complete the following work as part of this course:
+
+### Part 1: Pipeline Understanding & Setup (Mandatory)
+
+**Tasks:**
+1. ✅ Clone the repository and understand the project structure
+2. ✅ Set up Databricks access and verify Unity Catalog connectivity
+3. ✅ Create your personal pipeline in Databricks
+4. ✅ Run the complete pipeline successfully (all 4 layers)
+5. ✅ Verify all tables are created and contain data
+6. ✅ Document any issues encountered and their solutions
+
+**Deliverables:**
+- Successfully running pipeline in your Databricks workspace
+- Screenshots of each layer (bronze, silver, gold, ML) showing table creation
+- A brief written summary of the pipeline architecture in your own words
+
+**Evaluation Criteria:**
+- All tables created successfully
+- Understanding demonstrated in written summary
+- Proper documentation of setup process
+
+---
+
+### Part 2: Feature Engineering Project (Mandatory)
+
+**Objective:** Enhance the current silver layer with additional ML features
+
+**Required Tasks:**
+1. ✅ Analyze the current features in `silver_taxi_features.py`
+2. ✅ Create at least **3 new features** beyond the existing ones
+3. ✅ Add corresponding data quality expectations for new features
+4. ✅ Document each feature with:
+   - Feature name and description
+   - Calculation method
+   - Business justification
+   - Expected data quality rules
+
+**Examples of Features You Can Add:**
+- Trip category (short, medium, long distance)
+- Peak hour indicator (rush hour vs. off-peak)
+- Weather impact estimation
+- Seasonal patterns
+- Route popularity score
+- Tip likelihood indicator
+- Multi-passenger trip indicator
+
+**Deliverables:**
+- Modified `silver_taxi_features.py` with new features
+- Feature documentation (comments in code + separate document)
+- Updated pipeline with new features working correctly
+- Data quality metrics for new features
+
+**Evaluation Criteria:**
+- Quality and relevance of features (not arbitrary additions)
+- Proper implementation with data quality checks
+- Clear documentation and justification
+- Successful execution without errors
+
+---
+
+### Part 3: Model Improvement & Analysis (Mandatory)
+
+**Objective:** Improve the ML model performance and create analysis
+
+**Required Tasks:**
+1. ✅ Review current model performance metrics (RMSE, MAE, R²)
+2. ✅ Identify poor prediction cases and analyze root causes
+3. ✅ Implement at least **2 model improvements**:
+   - Option A: Add new features from Part 2
+   - Option B: Modify model formula with interaction terms
+   - Option C: Adjust model parameters or logic
+   - Option D: Add domain-specific adjustments
+4. ✅ Compare new vs. old model performance
+5. ✅ Document findings and recommendations
+
+**Deliverables:**
+- Comparison report: Old model vs. New model performance
+- Analysis of prediction errors (where does model fail?)
+- Recommendations for further improvements
+- Updated model code with improvements
+- SQL queries showing performance comparison
+
+**Evaluation Criteria:**
+- Demonstrated improvement in at least one metric
+- Thorough analysis of model behavior
+- Clear documentation of changes made
+- Professional presentation of results
+
+---
+
+### Part 4: CI/CD Implementation (Mandatory)
+
+**Objective:** Set up automated pipeline with GitHub Actions
+
+**Required Tasks:**
+1. ✅ Fork the repository to your personal GitHub account
+2. ✅ Configure GitHub Secrets (DATABRICKS_HOST, DATABRICKS_TOKEN, PIPELINE_ID)
+3. ✅ Set up CI/CD workflow for your pipeline
+4. ✅ Test automated pipeline trigger via GitHub push
+5. ✅ Document the CI/CD process and workflow
+
+**Deliverables:**
+- Successful GitHub Actions workflow execution
+- Screenshots of workflow logs
+- Documentation of:
+  - How to trigger pipeline via GitHub
+  - What validations are performed
+  - How to monitor pipeline execution
+  - Troubleshooting steps
+
+**Evaluation Criteria:**
+- Working CI/CD pipeline
+- Proper secret management
+- Clear documentation
+- Successful automated execution
+
+---
+
+### Part 5: Portfolio Project - Choose One (Optional - for bonus/higher grades)
+
+Choose ONE advanced project to enhance your portfolio:
+
+#### Option A: Advanced ML with A/B Testing
+- Implement two different model training approaches
+- Create A/B testing framework
+- Perform statistical analysis of results
+- Deliverable: A/B test report with recommendations
+
+#### Option B: Data Quality Dashboard
+- Create monitoring and alerting system
+- Build Databricks dashboard for quality metrics
+- Set up automated quality reports
+- Deliverable: Dashboard + automated quality report system
+
+#### Option C: Production Monitoring & Alerting
+- Implement comprehensive pipeline monitoring
+- Add alert system for failures
+- Create performance metrics tracking
+- Deliverable: Monitoring dashboard + alert configuration
+
+#### Option D: Data Documentation & Lineage
+- Document data lineage from source to predictions
+- Create data dictionary for all tables
+- Build automated metadata documentation
+- Deliverable: Complete data documentation package
+
+#### Option E: Cost Optimization Study
+- Analyze pipeline costs (compute, storage, data transfer)
+- Identify optimization opportunities
+- Implement at least 2 cost-saving improvements
+- Deliverable: Cost analysis report with savings quantification
+
+---
+
+### Final Deliverables Checklist
+
+**Required for All Students:**
+
+- [ ] **Part 1 Complete**: Running pipeline + documentation
+- [ ] **Part 2 Complete**: At least 3 new features implemented
+- [ ] **Part 3 Complete**: Model improvements + analysis report
+- [ ] **Part 4 Complete**: CI/CD workflow configured and tested
+- [ ] **GitHub Repository**: Fork created with all changes pushed
+- [ ] **Final Report**: Comprehensive project summary (2-3 pages)
+- [ ] **Code Quality**: Comments, documentation, clean code
+- [ ] **Testing**: All changes tested and working
+
+**Optional for Bonus:**
+- [ ] **Part 5 Complete**: One advanced project implemented
+
+### Submission Instructions
+
+1. **Push All Changes** to your GitHub repository
+2. **Email Submission** to mbayebabacar@gmail.com with:
+   - GitHub repository URL
+   - Links to key documents/reports
+   - List of completed work
+   - The name of your Unity Catalog catalog
+
+
+### Grading Breakdown
+
+| Component | Weight | Notes |
+|-----------|--------|-------|
+| Part 1: Setup & Understanding | 15% | Demonstrates foundational knowledge |
+| Part 2: Feature Engineering | 25% | Quality and relevance of features |
+| Part 3: Model Improvement | 25% | Performance gains and analysis |
+| Part 4: CI/CD Implementation | 20% | Automation and documentation |
+| Part 5: Portfolio Project (bonus) | +15% | Can exceed 100% for extra credit |
+| Code Quality & Documentation | 15% | Clarity, comments, organization |
+
 
 ---
 
