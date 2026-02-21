@@ -75,20 +75,36 @@ def ml_model_training():
         test_encoded
         .withColumn(
             "predicted_total_amount",
+            
             # Base fare
             F.lit(3.0) +
-            # Distance component (major factor)
+            
+            # Distance
             (F.col("trip_distance") * 2.5) +
-            # Duration component
+            
+            # Duration
             (F.col("trip_duration_minutes") * 0.5) +
-            # Time of day adjustments
+            
+            # Time adjustments
             F.when(F.col("time_evening") == 1, 2.0).otherwise(0.0) +
             F.when(F.col("time_night") == 1, 3.0).otherwise(0.0) +
+            
             # Airport surcharge
             F.when(F.col("airport_pickup_flag") == 1, 5.0).otherwise(0.0) +
             F.when(F.col("airport_dropoff_flag") == 1, 5.0).otherwise(0.0) +
-            # Passenger count
-            (F.col("passenger_count") * 0.5)
+            
+            # Passenger effect
+            (F.col("passenger_count") * 0.5) +
+            
+            # ===============================
+            # 🔥 NOUVELLES AMÉLIORATIONS
+            # ===============================
+            
+            # Interaction distance × peak hour
+            (F.col("trip_distance") * F.col("peak_hour_flag") * 0.8) +
+            
+            # Long trip surcharge
+            F.when(F.col("trip_category") == "long", 4.0).otherwise(0.0)
         )
     )
     

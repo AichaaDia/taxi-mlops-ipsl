@@ -48,7 +48,10 @@ def ml_training_data():
             "RatecodeID",
             
             # Date for partitioning
-            "pickup_date"
+            "pickup_date",
+            "trip_category",
+            "peak_hour_flag",
+            "multi_passenger_flag",
         )
         # Add train/test split (80/20 split based on hash)
         .withColumn("is_training", (F.hash("pickup_date", "PULocationID") % 100) < 80)
