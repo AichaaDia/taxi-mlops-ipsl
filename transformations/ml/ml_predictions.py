@@ -127,3 +127,5 @@ def ml_predictions():
         "under_prediction_flag",
         "over_prediction_flag"
     )
+
+# Test CI/CD
