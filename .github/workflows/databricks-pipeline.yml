@@ -19,7 +19,6 @@ on:
         type: boolean
         default: false
 
-# Add permissions for the workflow
 permissions:
   contents: read
   pull-requests: write
@@ -29,54 +28,56 @@ jobs:
   validate-pipeline:
     name: Validate Pipeline Syntax
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      
+
       - name: Install dependencies
         run: |
           pip install pyspark requests
-      
+
       - name: Validate Python syntax
         run: |
-          python -m py_compile transformations/**/*.py
+          find transformations -name "*.py" -exec python -m py_compile {} \;
 
   trigger-pipeline:
     name: Trigger Complete MLOps Pipeline
     runs-on: ubuntu-latest
     needs: validate-pipeline
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      
+
       - name: Install dependencies
         run: |
           pip install requests
-      
-      - name: Trigger Pipeline Update
+
+      - name: Trigger Databricks Pipeline
         env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_PROD_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PROD_TOKEN }}
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           PIPELINE_ID: ${{ secrets.PIPELINE_ID }}
         run: |
-          python cicd/trigger_pipeline.py --action start-and-wait ${{ github.event.inputs.full_refresh && '--full-refresh' || '' }}
-      
-      - name: Pipeline Status
+          python cicd/trigger_pipeline.py --action start-and-wait
+
+      - name: Check Pipeline Status
         if: always()
         env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_PROD_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PROD_TOKEN }}
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           PIPELINE_ID: ${{ secrets.PIPELINE_ID }}
         run: |
           python cicd/trigger_pipeline.py --action status
@@ -86,10 +87,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate-pipeline
     if: github.event_name == 'pull_request'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Comment on PR
         uses: actions/github-script@v7
         with:
