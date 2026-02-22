@@ -930,3 +930,54 @@ For questions about this project:
 **Bonne chance! 🚀**
 
 *This project is part of the Data Engineering, AI Engineering and MLOps course at Institut Polytechnique de Saint Louis, taught by Dr. Mbaye Babacar Gueye.*
+
+
+
+
+
+# CI/CD Implementation – Databricks Pipeline Automation
+
+## Overview
+
+This project implements a Continuous Integration / Continuous Deployment (CI/CD) workflow using GitHub Actions to automatically trigger a Databricks Delta Live Tables pipeline.
+
+## Architecture
+
+Code Push → GitHub Actions → Databricks REST API → Pipeline Execution
+
+## Workflow File
+
+.github/workflows/databricks-pipeline.yml
+
+## Trigger Conditions
+
+The workflow runs automatically:
+
+- On push to main branch
+- On manual workflow dispatch
+
+## Secrets Configuration
+
+The following repository secrets are required:
+
+- DATABRICKS_HOST
+- DATABRICKS_TOKEN
+- PIPELINE_ID
+
+These are securely stored in:
+Settings → Secrets and variables → Actions
+
+## Workflow Steps
+
+1. Validate pipeline syntax
+2. Install Python dependencies
+3. Trigger Databricks pipeline using REST API
+4. Wait for pipeline completion
+5. Check final pipeline status
+
+## Result
+
+The pipeline execution is fully automated.
+Every push to the main branch triggers a Databricks pipeline update.
+
+This implementation follows MLOps best practices for automation, security, and reproducibility.
